@@ -9,6 +9,8 @@ function App() {
   let [berry, setBerry] = useState("");
   let [firminess, setFerminess] = useState("");
   let [flavor, setFlavor] = useState('');
+  let[inputValue, setInputValue] = useState('');
+  let[searchValue, setSearchValue] = useState('');
 
 
 useEffect( ()=> {
@@ -52,11 +54,28 @@ axios
       })
   }, []);
 
+
+  const searchBerry = () => {
+    axios
+    .get(`https://pokeapi.co/api/v2/berry/${inputValue}`)
+    .then((response) => {
+      setSearchValue({
+        id: response.data.id, name: response.data.name
+      })
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  }
+
   return (
     <div className="App">
       {berry ? <Card id={berry.id} name={berry.name}  /> : null}
       {firminess ? <Card id={firminess.id} name={firminess.name}  /> : null}
       {flavor ? <Card id={flavor.id} name={flavor.name}  /> : null}
+      {searchValue ? <Card id={searchValue.id} name={searchValue.name}  /> : null}
+      <input type="text" placeholder="Find berry" value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+      <button onClick={searchBerry}>Search</button>
     </div>
   );
 }
