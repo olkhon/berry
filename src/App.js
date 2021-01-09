@@ -7,6 +7,7 @@ import axios from "axios";
 function App() {
 
   let [berry, setBerry] = useState("");
+  let [firminess, setFerminess] = useState("");
 
 
 useEffect( ()=> {
@@ -22,9 +23,24 @@ useEffect( ()=> {
   })
 }, []);
 
+
+useEffect ( () => {
+axios
+  .get("https://pokeapi.co/api/v2/berry-firmness/1")
+  .then((response) => {
+    setFerminess( {
+      id: response.data.id, name: response.data.name
+    })
+  })
+  .catch((error) => {
+    console.log(error);
+  })
+}, []);
+
   return (
     <div className="App">
       {berry ? <Card id={berry.id} name={berry.name}  /> : null}
+      {firminess ? <Card id={firminess.id} name={firminess.name}  /> : null}
     </div>
   );
 }
